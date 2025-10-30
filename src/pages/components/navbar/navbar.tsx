@@ -8,10 +8,10 @@ const Navbar = () => {
         QuziGo
       </h1>
       <div className='flex gap-5'> 
-       <a href='/auth/signin'> 
+       <a href='/Login'> 
         <Button variant={'outline'} className='text-black text-md'>Sign In</Button>
         </a>
-       <a href='/auth/register'>
+       <a href='/Register'>
         <Button variant={'gradient'} className='text-white text-md'>Register</Button>
        </a>
       </div>
