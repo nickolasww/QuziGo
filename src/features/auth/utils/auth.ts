@@ -19,7 +19,6 @@ export const getUsers = (): User[] => {
     const users = localStorage.getItem(USERS_KEY);
     return users ? JSON.parse(users) : [];
   } catch (error) {
-    console.error("Error getting users:", error);
     return [];
   }
 };
@@ -30,7 +29,6 @@ export const saveUser = (user: User): void => {
     users.push(user);
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   } catch (error) {
-    console.error("Error saving user:", error);
     throw new Error("Failed to save user");
   }
 };
@@ -55,7 +53,6 @@ export const setCurrentUser = (user: User): void => {
   try {
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
   } catch (error) {
-    console.error("Error setting current user:", error);
     throw new Error("Failed to set current user");
   }
 };
@@ -65,7 +62,6 @@ export const getCurrentUser = (): User | null => {
     const user = localStorage.getItem(CURRENT_USER_KEY);
     return user ? JSON.parse(user) : null;
   } catch (error) {
-    console.error("Error getting current user:", error);
     return null;
   }
 };
@@ -74,6 +70,5 @@ export const logout = (): void => {
   try {
     localStorage.removeItem(CURRENT_USER_KEY);
   } catch (error) {
-    console.error("Error logging out:", error);
   }
 };

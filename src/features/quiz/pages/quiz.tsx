@@ -18,14 +18,10 @@ export const QuizPage = () => {
   useEffect(() => {
     const loadQuestions = async () => {
       try {
-        console.log('🚀 [QuizPage] Starting to load questions...');
-        console.log('🚀 [QuizPage] Category ID from URL:', categoryId);
-        
         setLoading(true);
         setError(null);
         
         const categoryNum = categoryId ? parseInt(categoryId) : 17;
-        console.log('🚀 [QuizPage] Parsed category number:', categoryNum);
         
         const fetchedQuestions = await fetchTriviaQuestions(
           10,
@@ -33,23 +29,16 @@ export const QuizPage = () => {
           'easy',
           'boolean'
         );
-        
-        console.log('✅ [QuizPage] Questions fetched successfully:', fetchedQuestions.length);
-        console.log('✅ [QuizPage] Questions data:', fetchedQuestions);
-        
+
         setQuestions(fetchedQuestions);
-        console.log('✅ [QuizPage] Questions state updated');
       } catch (err) {
-        console.error('❌ [QuizPage] Error loading questions:', err);
         if (err instanceof Error) {
-          console.error('❌ [QuizPage] Error message:', err.message);
           setError(`Failed to load quiz: ${err.message}`);
         } else {
           setError('Failed to load quiz questions. Please try again.');
         }
       } finally {
         setLoading(false);
-        console.log('🏁 [QuizPage] Loading completed');
       }
     };
 
@@ -120,11 +109,6 @@ export const QuizPage = () => {
   const getQuizTitle = (catId: string | undefined) => {
     const titles: { [key: string]: string } = {
       '17': 'Science & Nature Quiz',
-      '18': 'Computer Science Quiz',
-      '19': 'Mathematics Quiz',
-      '23': 'History Quiz',
-      '22': 'Geography Quiz',
-      '9': 'General Knowledge Quiz',
     };
     return titles[catId || '17'] || 'Trivia Quiz';
   };

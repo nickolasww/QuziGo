@@ -19,18 +19,13 @@ export const useQuiz = (questions: Question[]) => {
 
   // Update questions when they are loaded
   useEffect(() => {
-    console.log('🎮 [useQuiz] Questions prop changed:', questions.length, 'questions');
     if (questions.length > 0) {
-      console.log('🎮 [useQuiz] Updating quiz state with new questions');
-      console.log('🎮 [useQuiz] First question:', questions[0]);
       setQuizState((prev) => ({
         ...prev,
         questions,
-        timeRemaining: TIME_PER_QUESTION, // Reset timer for first question
+        timeRemaining: TIME_PER_QUESTION,
       }));
-    } else {
-      console.log('⚠️ [useQuiz] Questions array is empty');
-    }
+    } 
   }, [questions]);
 
   // Timer countdown - per question
