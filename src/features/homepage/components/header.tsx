@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import Atas from "../../../assets/Atas.svg";
 import Bawah from "../../../assets/Bawah.svg";
 import { BsStars } from "react-icons/bs";

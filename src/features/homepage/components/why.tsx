@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/shared/components/ui/card";
 import { LuBrain } from "react-icons/lu";
 import { CiGift } from "react-icons/ci";
 import { IoPeopleOutline } from "react-icons/io5";

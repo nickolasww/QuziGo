@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/shared/components/ui/card";
 import { FaBookOpen } from "react-icons/fa";
 import { GiMaterialsScience } from "react-icons/gi";
 import { TbMath } from "react-icons/tb";
