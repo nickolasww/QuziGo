@@ -20,67 +20,19 @@ const Dashboard = () => {
     navigate('/');
   };
 
-  // Sample quiz data for users to practice
   const quizzes = [
     {
-      id: 1,
-      title: "React Fundamentals",
-      description: "Test your knowledge of React basics",
-      icon: "📝",
-      color: "bg-blue-500",
-      questions: 15,
-      duration: "20 min",
-      completions: 234,
-    },
-    {
-      id: 2,
-      title: "JavaScript ES6+",
-      description: "Modern JavaScript features and concepts",
-      icon: "💻",
-      color: "bg-yellow-500",
-      questions: 20,
-      duration: "25 min",
-      completions: 189,
-    },
-    {
-      id: 3,
-      title: "CSS Flexbox & Grid",
-      description: "Master modern CSS layouts",
-      icon: "🎨",
-      color: "bg-purple-500",
-      questions: 12,
-      duration: "15 min",
-      completions: 156,
-    },
-    {
-      id: 4,
-      title: "TypeScript Basics",
-      description: "Introduction to TypeScript",
-      icon: "📘",
-      color: "bg-blue-600",
-      questions: 18,
-      duration: "30 min",
-      completions: 203,
-    },
-    {
-      id: 5,
-      title: "Node.js Essentials",
-      description: "Backend development with Node.js",
-      icon: "🟢",
+      id: 17, // Science & Nature category
+      title: "Science & Nature",
+      description: "Test your knowledge of natural sciences",
+      icon: "🔬",
       color: "bg-green-500",
-      questions: 16,
-      duration: "22 min",
-      completions: 145,
-    },
-    {
-      id: 6,
-      title: "Database Design",
-      description: "SQL and database fundamentals",
-      icon: "🗄️",
-      color: "bg-orange-500",
-      questions: 14,
-      duration: "18 min",
-      completions: 98,
+      questions: 10,
+      duration: "10 min",
+      completions: 234,
+      category: 17,
+      difficulty: "easy",
+      type: "boolean"
     },
   ];
 

@@ -1,12 +1,60 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuiz } from '../hooks/useQuiz';
 import { QuizHeader } from '../components/QuizHeader';
 import { QuizContent } from '../components/QuizContent';
 import { QuizResults } from '../components/QuizResults';
-import { SAMPLE_QUESTIONS } from '../data/sampleQuestions';
+import { fetchTriviaQuestions } from '../services/triviaApi';
+import type { Question } from '../types/quiz';
 
 export const QuizPage = () => {
   const navigate = useNavigate();
+  const { categoryId } = useParams();
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch questions from API when component mounts
+  useEffect(() => {
+    const loadQuestions = async () => {
+      try {
+        console.log('🚀 [QuizPage] Starting to load questions...');
+        console.log('🚀 [QuizPage] Category ID from URL:', categoryId);
+        
+        setLoading(true);
+        setError(null);
+        
+        const categoryNum = categoryId ? parseInt(categoryId) : 17;
+        console.log('🚀 [QuizPage] Parsed category number:', categoryNum);
+        
+        const fetchedQuestions = await fetchTriviaQuestions(
+          10,
+          categoryNum,
+          'easy',
+          'boolean'
+        );
+        
+        console.log('✅ [QuizPage] Questions fetched successfully:', fetchedQuestions.length);
+        console.log('✅ [QuizPage] Questions data:', fetchedQuestions);
+        
+        setQuestions(fetchedQuestions);
+        console.log('✅ [QuizPage] Questions state updated');
+      } catch (err) {
+        console.error('❌ [QuizPage] Error loading questions:', err);
+        if (err instanceof Error) {
+          console.error('❌ [QuizPage] Error message:', err.message);
+          setError(`Failed to load quiz: ${err.message}`);
+        } else {
+          setError('Failed to load quiz questions. Please try again.');
+        }
+      } finally {
+        setLoading(false);
+        console.log('🏁 [QuizPage] Loading completed');
+      }
+    };
+
+    loadQuestions();
+  }, [categoryId]);
 
   const {
     quizState,
@@ -17,11 +65,41 @@ export const QuizPage = () => {
     formatTime,
     handleAnswerSelect,
     calculateStats,
-  } = useQuiz(SAMPLE_QUESTIONS);
+  } = useQuiz(questions);
 
   const handleBack = () => {
     navigate('/dashboard');
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-white text-xl">Loading quiz questions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <h1 className="text-white text-3xl font-bold mb-4">Oops!</h1>
+          <p className="text-gray-400 text-lg mb-8">{error || 'No questions available'}</p>
+          <button
+            onClick={handleBack}
+            className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Show results when quiz is completed
   if (quizState.isCompleted) {
@@ -38,12 +116,25 @@ export const QuizPage = () => {
     );
   }
 
+  // Get quiz title based on category
+  const getQuizTitle = (catId: string | undefined) => {
+    const titles: { [key: string]: string } = {
+      '17': 'Science & Nature Quiz',
+      '18': 'Computer Science Quiz',
+      '19': 'Mathematics Quiz',
+      '23': 'History Quiz',
+      '22': 'Geography Quiz',
+      '9': 'General Knowledge Quiz',
+    };
+    return titles[catId || '17'] || 'Trivia Quiz';
+  };
+
   // Show quiz content
   return (
     <div className="min-h-screen bg-black">
       <QuizHeader 
         onBack={handleBack} 
-        title="Science & Technology Quiz" 
+        title={getQuizTitle(categoryId)} 
       />
       
       <QuizContent

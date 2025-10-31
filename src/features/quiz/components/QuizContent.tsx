@@ -26,6 +26,25 @@ export const QuizContent = ({
   showingAnswer,
   onAnswerSelect,
 }: QuizContentProps) => {
+  console.log('📄 [QuizContent] Rendering with:', {
+    progress,
+    currentQuestionIndex,
+    totalQuestions,
+    currentQuestion: currentQuestion ? 'Available' : 'Missing',
+    questionText: currentQuestion?.question?.substring(0, 50) + '...',
+  });
+
+  if (!currentQuestion) {
+    console.error('❌ [QuizContent] No current question available!');
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="text-center text-white">
+          <p>Error: No question available</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       {/* Progress Bar */}
