@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/shared/components/ui/button";
 import Atas from "../../../assets/Atas.svg";
 import Bawah from "../../../assets/Bawah.svg";
@@ -7,8 +6,8 @@ import { BsStars } from "react-icons/bs";
 const Header = () => {
   return (
     <div className="flex flex-col w-full justify-center items-center min-h-screen bg-black px-4 sm:px-8 md:px-12 lg:px-20 py-5">
-      <div className="relative w-screen">
-        <img src={Atas} alt="QuziGo Logo" className="absolute -bottom-19 hidden md:block" />
+      <div className="relative w-screen z-0">
+        <img src={Atas} alt="QuziGo Logo" className="absolute -bottom-19 hidden md:block pointer-events-none" />
       </div>
       <div className="flex gap-2 items-center text-white px-3 py-1 rounded-lg bg-[#202022] mb-3 text-xs sm:text-sm">
         <BsStars className="text-purple-700 text-sm sm:text-base" />
@@ -24,7 +23,8 @@ const Header = () => {
         Join thousands of students and teachers on the ultimate quiz platform.
         Test your knowledge, compete with peers, and win exciting rewards
       </h2>
-      <div className="mb-8 md:mb-0">
+      <div className="mb-8 md:mb-0 relative z-20">
+        <a href="/Login"> 
         <Button
           variant={"gradient"}
           className="text-sm sm:text-base md:text-md cursor-pointer text-white"
@@ -32,9 +32,10 @@ const Header = () => {
         >
           Get Started
         </Button>
+        </a>
       </div>
-      <div className="relative w-screen">
-        <img src={Bawah} alt="QuziGo Logo" className="absolute -top-19 hidden md:block" />
+      <div className="relative w-screen z-0">
+        <img src={Bawah} alt="QuziGo Logo" className="absolute -top-19 hidden md:block pointer-events-none" />
       </div>
     </div>
   );
