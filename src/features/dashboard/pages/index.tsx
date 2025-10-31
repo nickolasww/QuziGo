@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logout } from "@/features/auth/utils/auth";
 import { Input } from "@/shared/components/ui/input";
 import {
   FaBookOpen,
-  FaCog,
+  FaSignOutAlt,
   FaSearch,
   FaClock,
   FaCheckCircle,
@@ -13,6 +14,11 @@ import {
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); 
+    navigate('/');
+  };
 
   // Sample quiz data for users to practice
   const quizzes = [
@@ -101,13 +107,13 @@ const Dashboard = () => {
         </nav>
 
         <div className="absolute bottom-0 w-64 border-t border-gray-800">
-          <a
-            href="#"
-            className="flex items-center gap-3 px-6 py-4 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-6 py-4 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors w-full"
           >
-            <FaCog className="text-xl" />
-            <span className="font-medium">Settings</span>
-          </a>
+            <FaSignOutAlt className="text-xl" />
+            <span className="font-medium">Logout</span>
+          </button>
         </div>
       </aside>
 

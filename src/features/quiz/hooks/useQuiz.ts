@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Question, QuizState } from '../types/quiz';
 
-const INITIAL_LIVES = 3;
 const INITIAL_TIME = 600; // 10 minutes in seconds
 
 export const useQuiz = (questions: Question[]) => {
@@ -10,12 +9,13 @@ export const useQuiz = (questions: Question[]) => {
     currentQuestionIndex: 0,
     answers: {},
     score: 0,
-    lives: INITIAL_LIVES,
+    lives: 0,
     timeRemaining: INITIAL_TIME,
     isCompleted: false,
   });
 
   const [isTimerRunning, setIsTimerRunning] = useState(true);
+  const [showingAnswer, setShowingAnswer] = useState(false);
 
   // Timer countdown
   useEffect(() => {
@@ -41,6 +41,10 @@ export const useQuiz = (questions: Question[]) => {
   };
 
   const handleAnswerSelect = useCallback((answerId: string) => {
+    if (showingAnswer) return; // Prevent multiple selections
+    
+    setShowingAnswer(true);
+    
     setQuizState((prev) => {
       const currentQuestion = prev.questions[prev.currentQuestionIndex];
       const isCorrect = answerId === currentQuestion.correctAnswer;
@@ -52,42 +56,61 @@ export const useQuiz = (questions: Question[]) => {
           [prev.currentQuestionIndex]: answerId,
         },
         score: isCorrect ? prev.score + currentQuestion.points : prev.score,
-        lives: isCorrect ? prev.lives : Math.max(0, prev.lives - 1),
       };
     });
-  }, []);
 
-  const handleNextQuestion = useCallback(() => {
-    setQuizState((prev) => {
-      const nextIndex = prev.currentQuestionIndex + 1;
-      
-      if (nextIndex >= prev.questions.length || prev.lives === 0) {
-        return { ...prev, isCompleted: true };
-      }
-      
-      return {
-        ...prev,
-        currentQuestionIndex: nextIndex,
-      };
-    });
-  }, []);
-
-  const handleSkipQuestion = useCallback(() => {
-    handleNextQuestion();
-  }, [handleNextQuestion]);
+    // Auto advance to next question after 1.5 seconds
+    setTimeout(() => {
+      setQuizState((prev) => {
+        const nextIndex = prev.currentQuestionIndex + 1;
+        
+        if (nextIndex >= prev.questions.length) {
+          return { ...prev, isCompleted: true };
+        }
+        
+        return {
+          ...prev,
+          currentQuestionIndex: nextIndex,
+        };
+      });
+      setShowingAnswer(false);
+    }, 1500);
+  }, [showingAnswer]);
 
   const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
   const progress = ((quizState.currentQuestionIndex + 1) / quizState.questions.length) * 100;
   const selectedAnswer = quizState.answers[quizState.currentQuestionIndex];
+
+  // Calculate quiz statistics
+  const calculateStats = useCallback(() => {
+    const totalAnswered = Object.keys(quizState.answers).length;
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    Object.entries(quizState.answers).forEach(([questionIndex, answerId]) => {
+      const question = quizState.questions[parseInt(questionIndex)];
+      if (question.correctAnswer === answerId) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+    });
+
+    return {
+      totalAnswered,
+      correctCount,
+      wrongCount,
+    };
+  }, [quizState.answers, quizState.questions]);
 
   return {
     quizState,
     currentQuestion,
     progress,
     selectedAnswer,
+    showingAnswer,
     formatTime,
     handleAnswerSelect,
-    handleNextQuestion,
-    handleSkipQuestion,
+    calculateStats,
   };
 };

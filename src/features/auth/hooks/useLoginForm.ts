@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { validateEmail, validateRequired } from "@/features/auth/utils/validation";
 import { authenticateUser, setCurrentUser } from "@/features/auth/utils/auth";
 
@@ -8,6 +9,7 @@ interface LoginFormData {
 }
 
 export const useLoginForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -63,9 +65,9 @@ export const useLoginForm = () => {
         });
         setShowSuccessModal(true);
         
-        // Redirect after modal is shown
+        // Redirect after modal is shown - smooth navigation without reload
         setTimeout(() => {
-          window.location.href = "/";
+          navigate('/dashboard');
         }, 2000);
       } else {
         setError("Invalid email or password");
@@ -76,7 +78,7 @@ export const useLoginForm = () => {
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    window.location.href = "/";
+    navigate('/dashboard');
   };
 
   return {
