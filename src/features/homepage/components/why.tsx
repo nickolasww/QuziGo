@@ -20,7 +20,7 @@ const Why = () => {
         <FaStar className="text-purple-700 text-sm sm:text-base" />
         <h1>Features</h1>
       </div>
-      <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-center px-2">Why QuziGo</h1>
+      <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-center px-2">Why <span className="bg-linear-to-r from-[#5813C1] to-[#C45037] bg-clip-text text-transparent">QuziGo</span></h1>
       <h2 className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-2xl text-center px-4 sm:px-8 md:px-12 max-w-4xl">
         Discover quizzes across various subjects to test and expand your
         knowledge
