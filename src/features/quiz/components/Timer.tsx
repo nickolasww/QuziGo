@@ -4,7 +4,7 @@ interface TimerProps {
 }
 
 export const Timer = ({ timeRemaining, formatTime }: TimerProps) => {
-  const isWarning = timeRemaining < 60;
+  const isWarning = timeRemaining <= 10; // Warning when 10 seconds or less
   
   return (
     <div className="flex items-center gap-2">

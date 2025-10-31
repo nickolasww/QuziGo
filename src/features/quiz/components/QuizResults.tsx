@@ -14,7 +14,6 @@ export const QuizResults = ({
   score,
   stats,
   totalQuestions,
-  timeRemaining,
   onBack,
 }: QuizResultsProps) => {
   const accuracy = stats.totalAnswered > 0 
@@ -29,7 +28,7 @@ export const QuizResults = ({
           <div className="text-center mb-8">
             <h1 className="text-white text-4xl font-bold mb-2">Quiz Completed!</h1>
             <p className="text-gray-400 text-lg">
-              {timeRemaining === 0 ? 'Time has run out!' : 'You have completed the quiz!'}
+              You have completed the quiz!
             </p>
           </div>
 

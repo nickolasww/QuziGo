@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Question, QuizState } from '../types/quiz';
 
-const INITIAL_TIME = 600; // 10 minutes in seconds
+const TIME_PER_QUESTION = 10; 
 
 export const useQuiz = (questions: Question[]) => {
   const [quizState, setQuizState] = useState<QuizState>({
@@ -10,7 +10,7 @@ export const useQuiz = (questions: Question[]) => {
     answers: {},
     score: 0,
     lives: 0,
-    timeRemaining: INITIAL_TIME,
+    timeRemaining: TIME_PER_QUESTION,
     isCompleted: false,
   });
 
@@ -26,33 +26,45 @@ export const useQuiz = (questions: Question[]) => {
       setQuizState((prev) => ({
         ...prev,
         questions,
+        timeRemaining: TIME_PER_QUESTION, // Reset timer for first question
       }));
     } else {
       console.log('⚠️ [useQuiz] Questions array is empty');
     }
   }, [questions]);
 
-  // Timer countdown
+  // Timer countdown - per question
   useEffect(() => {
-    if (!isTimerRunning || quizState.isCompleted) return;
+    if (!isTimerRunning || quizState.isCompleted || showingAnswer) return;
 
     const timer = setInterval(() => {
       setQuizState((prev) => {
         if (prev.timeRemaining <= 1) {
-          setIsTimerRunning(false);
-          return { ...prev, timeRemaining: 0, isCompleted: true };
+          // Time's up for this question - move to next
+          const nextIndex = prev.currentQuestionIndex + 1;
+          
+          if (nextIndex >= prev.questions.length) {
+            setIsTimerRunning(false);
+            return { ...prev, timeRemaining: 0, isCompleted: true };
+          }
+          
+          // Move to next question and reset timer
+          return {
+            ...prev,
+            currentQuestionIndex: nextIndex,
+            timeRemaining: TIME_PER_QUESTION,
+          };
         }
         return { ...prev, timeRemaining: prev.timeRemaining - 1 };
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isTimerRunning, quizState.isCompleted]);
+  }, [isTimerRunning, quizState.isCompleted, showingAnswer, quizState.questions.length]);
 
   const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    // For per-question timer, just show seconds
+    return `${seconds}s`;
   };
 
   const handleAnswerSelect = useCallback((answerId: string) => {
@@ -83,9 +95,11 @@ export const useQuiz = (questions: Question[]) => {
           return { ...prev, isCompleted: true };
         }
         
+        // Move to next question and reset timer
         return {
           ...prev,
           currentQuestionIndex: nextIndex,
+          timeRemaining: TIME_PER_QUESTION, // Reset timer for next question
         };
       });
       setShowingAnswer(false);
